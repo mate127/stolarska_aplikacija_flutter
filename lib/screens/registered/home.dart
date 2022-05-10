@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         title: Text("Success"),
-        backgroundColor: Colors.brown[600],
+        backgroundColor: Colors.blue[600],
         actions: [
           TextButton.icon(
             icon: Icon(Icons.person),
