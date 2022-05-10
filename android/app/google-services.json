@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "865744826485",
+    "project_id": "stolarska-aplikacija",
+    "storage_bucket": "stolarska-aplikacija.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865744826485:android:8e2537410b31ee3df1483c",
+        "android_client_info": {
+          "package_name": "com.mate127.stolarska_aplikacija"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "865744826485-1gmu1unut5p65vvtbdg7iuvj2qubngit.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKH5QdkjvNz9N2dwN-sgeg2FKjQroDPGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "865744826485-1gmu1unut5p65vvtbdg7iuvj2qubngit.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
