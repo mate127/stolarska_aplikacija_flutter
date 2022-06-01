@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:stolarska_aplikacija/models/constants.dart';
+import 'package:stolarska_aplikacija/models/the_user.dart';
+import 'package:stolarska_aplikacija/screens/anonymous/anonymous.dart';
+import 'package:stolarska_aplikacija/screens/anonymous/sign_in.dart';
 import '../../services/auth.dart';
 import '../../services/loading.dart';
 
 class Register extends StatefulWidget {
   //const Register({Key? key}) : super(key: key);
-  final Function toggleView;
-  Register({Key? key, required this.toggleView}) : super(key: key);
+  Register({Key? key}) : super(key: key);
   @override
   State<Register> createState() => _RegisterState();
 }
+
+enum typeOfUser { buyer, carpenter }
 
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
@@ -17,9 +21,12 @@ class _RegisterState extends State<Register> {
   bool loading = false;
 
   //text field state
+  String username = "";
   String email = "";
   String password = "";
+  String repeatPassword = " ";
   String error = "";
+  typeOfUser? user = typeOfUser.buyer;
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +36,28 @@ class _RegisterState extends State<Register> {
             backgroundColor: Colors.brown[100],
             appBar: AppBar(
               backgroundColor: Colors.brown[600],
-              title: Text("Registracija"),
+              //title: const Text("Registracija"),
+              leadingWidth: 130.0,
+              leading: TextButton.icon(
+                  style: TextButton.styleFrom(primary: Colors.white),
+                  onPressed: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Anonymous()));
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                  label: const Text(
+                    "Početna",
+                    style: TextStyle(fontSize: 20.0),
+                  )),
               actions: [
                 TextButton.icon(
                     style: TextButton.styleFrom(primary: Colors.white),
                     onPressed: () {
-                      widget.toggleView();
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => SignIn()));
                     },
-                    icon: Icon(Icons.person),
-                    label: Text("Prijava"))
+                    icon: const Icon(Icons.person),
+                    label: const Text("Prijava")),
               ],
             ),
             body: Padding(
@@ -45,8 +65,22 @@ class _RegisterState extends State<Register> {
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
               child: Form(
                   key: _formKey,
-                  child: Column(
+                  child: ListView(
                     children: [
+                      const SizedBox(height: 20.0),
+                      TextFormField(
+                        decoration: textInputDecoration.copyWith(
+                            hintText: "Korisničko ime"),
+                        validator: (value) =>
+                            value!.isEmpty ? "Ovo polje je obavezno" : null,
+                        onChanged: (value) {
+                          setState(() {
+                            if (mounted) {
+                              username = value;
+                            }
+                          });
+                        },
+                      ),
                       const SizedBox(height: 20.0),
                       TextFormField(
                         decoration:
@@ -55,7 +89,9 @@ class _RegisterState extends State<Register> {
                             value!.isEmpty ? "Ovo polje je obavezno" : null,
                         onChanged: (value) {
                           setState(() {
-                            email = value;
+                            if (mounted) {
+                              email = value;
+                            }
                           });
                         },
                       ),
@@ -71,7 +107,44 @@ class _RegisterState extends State<Register> {
                         obscureText: true,
                         onChanged: (value) {
                           setState(() {
-                            password = value;
+                            if (mounted) {
+                              password = value;
+                            }
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      TextFormField(
+                        decoration: textInputDecoration.copyWith(
+                            hintText: "Ponovi lozinku"),
+                        validator: (value) => value != password
+                            ? "Lozinke moraju biti iste"
+                            : null,
+                        obscureText: true,
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      RadioListTile<typeOfUser?>(
+                        title: const Text("Kupac"),
+                        value: typeOfUser.buyer,
+                        groupValue: user,
+                        onChanged: (typeOfUser? value) {
+                          setState(() {
+                            user = value;
+                            print("DA");
+                          });
+                        },
+                      ),
+                      RadioListTile<typeOfUser?>(
+                        title: const Text("Stolar"),
+                        value: typeOfUser.carpenter,
+                        groupValue: user,
+                        onChanged: (typeOfUser? value) {
+                          setState(() {
+                            user = value;
                           });
                         },
                       ),
@@ -84,8 +157,8 @@ class _RegisterState extends State<Register> {
                             setState(() {
                               loading = true;
                             });
-                            dynamic result =
-                                await _auth.registerWithEmail(email, password);
+                            dynamic result = await _auth.registerWithEmail(
+                                email, password, user, username);
                             if (result == null) {
                               setState(() {
                                 error =
@@ -106,7 +179,8 @@ class _RegisterState extends State<Register> {
                       const SizedBox(height: 12.0),
                       Text(
                         error,
-                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                        style:
+                            const TextStyle(color: Colors.red, fontSize: 14.0),
                       ),
                     ],
                   )),

@@ -10,19 +10,31 @@ class Anonymous extends StatefulWidget {
 }
 
 class _AnonymousState extends State<Anonymous> {
-  bool showLogin = true;
-  void toggleView() {
-    setState(() {
-      showLogin = !showLogin;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (showLogin) {
-      return SignIn(toggleView: toggleView);
-    } else {
-      return Register(toggleView: toggleView);
-    }
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Početna"),
+        backgroundColor: Colors.brown[600],
+        actions: [
+          TextButton.icon(
+              style: TextButton.styleFrom(primary: Colors.white),
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => SignIn()));
+              },
+              icon: const Icon(Icons.person),
+              label: const Text("Prijava")),
+          TextButton(
+              style: TextButton.styleFrom(primary: Colors.white),
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => Register()));
+              },
+              child: const Text("Registracija")),
+        ],
+      ),
+      body: ListView(),
+    );
   }
 }

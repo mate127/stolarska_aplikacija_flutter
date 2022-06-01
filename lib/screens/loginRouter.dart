@@ -13,7 +13,7 @@ class loginRouter extends StatelessWidget {
     if (user == null) {
       return Anonymous();
     } else {
-      return Home();
+      return Home(user: user);
     }
   }
 }

@@ -1,10 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:stolarska_aplikacija/screens/anonymous/register.dart';
 import '../models/the_user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //create user object based on FirebaseUser
+  // TheUser? _userFromFirebaseUser(User user, String name, typeOfUser? type) {
+  //   return TheUser(id: user.uid, name: name, type: type);
+  // }
+
   TheUser? _userFromFirebaseUser(User user) {
     return TheUser(id: user.uid);
   }
@@ -17,16 +22,16 @@ class AuthService {
   }
 
   //sign in anonymously
-  Future signInAnon() async {
-    try {
-      UserCredential result = await _auth.signInAnonymously();
-      User? user = result.user;
-      return _userFromFirebaseUser(user!);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
+  // Future signInAnon() async {
+  //   try {
+  //     UserCredential result = await _auth.signInAnonymously();
+  //     User? user = result.user;
+  //     return _userFromFirebaseUser(user!);
+  //   } catch (e) {
+  //     print(e.toString());
+  //     return null;
+  //   }
+  // }
 
   //sign in with email and password
   Future signInWithEmail(String email, String password) async {
@@ -42,7 +47,8 @@ class AuthService {
   }
 
   //register with email and password
-  Future registerWithEmail(String email, String password) async {
+  Future registerWithEmail(
+      String email, String password, typeOfUser? type, String username) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
